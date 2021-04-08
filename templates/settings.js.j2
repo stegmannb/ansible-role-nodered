@@ -309,7 +309,11 @@ module.exports = {
     // The allow/denyList options can be used to limit what modules the runtime
     // will install/load. It can use '*' as a wildcard that matches anything.
     externalModules: {
+{% if nodered_external_modules_autoinstall is defined %}
+        autoInstall: {{ nodered_external_modules_autoinstall }},   // Whether the runtime will attempt to automatically install missing modules
+{% else %}
         // autoInstall: false,   // Whether the runtime will attempt to automatically install missing modules
+{% endif %}
         // autoInstallRetry: 30, // Interval, in seconds, between reinstall attempts
         // palette: {              // Configuration for the Palette Manager
         //     allowInstall: true, // Enable the Palette Manager in the editor
