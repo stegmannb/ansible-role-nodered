@@ -1,1 +1,8 @@
 ---
+- name: Restart the nodered service.
+  systemd:
+    name: nodered.service
+    state: restarted
+  tags:
+    - molecule-idempotence-notest
+  when: nodered_service and not nodered_service_started_result.changed

@@ -1,4 +1,75 @@
 ---
-- name: Example task
-  debug:
-    msg: Running example task
+- name: Execute distribution dependent setup.
+  include_tasks: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower }}.yml"
+    - "{{ ansible_distribution|lower }}.yml"
+    - "{{ ansible_os_family|lower }}.yml"
+
+- name: Create the Node-RED user.
+  user:
+    name: "{{ nodered_user }}"
+    shell: "{{ nodered_user_shell }}"
+    home: "{{ nodered_user_home | default('/home/' + nodered_user) }}"
+    create_home: true
+    generate_ssh_key: true
+    ssh_key_type: ed25519
+    ssh_key_comment: "nodered@{{ inventory_hostname }}"
+  register: nodered_user_result
+
+- name: Install Node-RED node.js package.
+  community.general.npm:
+    name: node-red
+    state: "{{ 'latest' if nodered_update else 'present' }}"
+    path: "{{ nodered_user_result.home }}/.npm"
+  become_user: "{{ nodered_user }}"
+  register: nodered_npm_package
+
+- name: Create the Node-RED configuration directory.
+  file:
+    state: directory
+    path: "{{ nodered_user_result.home }}/.node-red"
+    owner: "{{ nodered_user_result.name }}"
+    group: "{{ nodered_user_result.group }}"
+    mode: "0755"
+
+- name: Create the Node-RED configuration file.
+  template:
+    src: templates/settings.js.j2
+    dest: "{{ nodered_user_result.home }}/.node-red/settings.js"
+    owner: "{{ nodered_user_result.name }}"
+    group: "{{ nodered_user_result.group }}"
+    mode: "0644"
+  notify: Restart the nodered service.
+
+- name: Install the systemd service file.
+  template:
+    src: templates/nodered.service.j2
+    dest: /etc/systemd/system/nodered.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart the nodered service.
+  when: nodered_service
+
+- name: Enable the nodered service.
+  systemd:
+    name: nodered.service
+    enabled: true
+    daemon_reload: true
+  when: nodered_service
+  register: nodered_service_enabled_result
+
+- name: Start the nodered service.
+  systemd:
+    name: nodered.service
+    state: started
+  when: nodered_service
+  register: nodered_service_started_result
+
+- name: Disable the nodered service.
+  systemd:
+    name: nodered.service
+    state: started
+    enabled: true
+  when: not nodered_service

@@ -1,0 +1,28 @@
+# To consult the log : journalctl -u Node-RED
+[Unit]
+Description=Node-RED graphical event wiring tool
+After=syslog.target network.target
+Documentation=http://nodered.org/
+
+[Service]
+Type=simple
+Environment="NODE_OPTIONS=--max-old-space-size=128"
+Environment="NODE_RED_OPTIONS=-v"
+ExecStart=/usr/bin/env node $NODE_OPTIONS {{ nodered_user_result.home }}/.npm/node_modules/node-red/red.js $NODE_RED_OPTIONS
+WorkingDirectory={{ nodered_user_result.home }}
+User={{ nodered_user_result.name }}
+Group={{ nodered_user_result.group }}
+Nice=10
+SyslogIdentifier=Node-RED
+StandardOutput=syslog
+# Make Node-RED restart if it fails
+Restart=on-failure
+# Node-RED need a SIGINT to be notified to stop
+KillSignal=SIGINT
+RestartSec=20
+# Tag things in the log
+SyslogIdentifier=Node-RED
+StandardOutput=syslog
+
+[Install]
+WantedBy=multi-user.target
