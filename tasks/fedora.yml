@@ -1,0 +1,7 @@
+---
+- name: Install required system packages.
+  dnf:
+    name:
+      - openssh-clients
+    update_cache: true
+    state: present

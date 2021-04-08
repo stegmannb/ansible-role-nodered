@@ -1,0 +1,8 @@
+---
+- name: Install required system packages.
+  apt:
+    name:
+      - openssh-client
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_valid_time | default('0') }}"
+    state: present
