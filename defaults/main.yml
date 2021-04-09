@@ -3,3 +3,4 @@ nodered_service: true
 nodered_update: true
 nodered_user: nodered
 nodered_user_shell: /bin/bash
+nodered_user_sudo: false

@@ -17,6 +17,19 @@
     ssh_key_comment: "nodered@{{ inventory_hostname }}"
   register: nodered_user_result
 
+- name: Allow Node-RED user to sudo.
+  lineinfile:
+    path: /etc/sudoers.d/15-{{ nodered_user }}-nopasswd
+    line: "{{ nodered_user }} ALL=(ALL) NOPASSWD: ALL"
+    state: present
+    create: true
+    owner: root
+    group: root
+    mode: "0440"
+    validate: "visudo -cf %s"
+  become: true
+  when: nodered_user_sudo
+
 - name: Install Node-RED node.js package.
   community.general.npm:
     name: node-red
@@ -73,3 +86,4 @@
     state: started
     enabled: true
   when: not nodered_service
+
