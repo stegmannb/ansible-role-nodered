@@ -4,3 +4,5 @@ nodered_update: true
 nodered_user: nodered
 nodered_user_shell: /bin/bash
 nodered_user_sudo: false
+nodered_args:
+nodered_node_args: --max-old-space-size=128

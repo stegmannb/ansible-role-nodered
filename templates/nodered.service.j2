@@ -6,8 +6,8 @@ Documentation=http://nodered.org/
 
 [Service]
 Type=simple
-Environment="NODE_OPTIONS=--max-old-space-size=128"
-Environment="NODE_RED_OPTIONS=-v"
+Environment="NODE_OPTIONS={{ nodered_node_args }}"
+Environment="NODE_RED_OPTIONS={{ nodered_args }}"
 ExecStart=/usr/bin/env node $NODE_OPTIONS {{ nodered_user_result.home }}/.npm/node_modules/node-red/red.js $NODE_RED_OPTIONS
 WorkingDirectory={{ nodered_user_result.home }}
 User={{ nodered_user_result.name }}
