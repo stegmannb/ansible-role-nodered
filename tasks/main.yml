@@ -86,4 +86,3 @@
     state: started
     enabled: true
   when: not nodered_service
-
