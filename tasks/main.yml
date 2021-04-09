@@ -53,6 +53,7 @@
     owner: "{{ nodered_user_result.name }}"
     group: "{{ nodered_user_result.group }}"
     mode: "0644"
+    backup: "{{ nodered_config_backup }}"
   notify: Restart the nodered service.
 
 - name: Install the systemd service file.
