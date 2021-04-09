@@ -310,7 +310,7 @@ module.exports = {
     // will install/load. It can use '*' as a wildcard that matches anything.
     externalModules: {
 {% if nodered_external_modules_autoinstall is defined %}
-        autoInstall: {{ nodered_external_modules_autoinstall }},   // Whether the runtime will attempt to automatically install missing modules
+        autoInstall: {{ nodered_external_modules_autoinstall|lower }},   // Whether the runtime will attempt to automatically install missing modules
 {% else %}
         // autoInstall: false,   // Whether the runtime will attempt to automatically install missing modules
 {% endif %}
