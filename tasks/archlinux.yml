@@ -5,3 +5,9 @@
       - openssh
     update_cache: true
     state: present
+
+- name: Remove Node-RED AUR package.
+  community.general.pacman:
+    name:
+      - nodejs-node-red
+    state: absent
