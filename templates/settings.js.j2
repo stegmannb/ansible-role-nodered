@@ -250,7 +250,7 @@ module.exports = {
     },
 
     // Allow the Function node to load additional npm modules
-    functionExternalModules: false,
+    functionExternalModules: {{ nodered_config_functionExternalModules|lower }},
 
     // `global.keys()` returns a list of all properties set in global context.
     // This allows them to be displayed in the Context Sidebar within the editor.
@@ -309,8 +309,8 @@ module.exports = {
     // The allow/denyList options can be used to limit what modules the runtime
     // will install/load. It can use '*' as a wildcard that matches anything.
     externalModules: {
-{% if nodered_external_modules_autoinstall is defined %}
-        autoInstall: {{ nodered_external_modules_autoinstall|lower }},   // Whether the runtime will attempt to automatically install missing modules
+{% if nodered_config_externalModules_autoInstall is defined %}
+        autoInstall: {{ nodered_config_externalModules_autoInstall|lower }},   // Whether the runtime will attempt to automatically install missing modules
 {% else %}
         // autoInstall: false,   // Whether the runtime will attempt to automatically install missing modules
 {% endif %}

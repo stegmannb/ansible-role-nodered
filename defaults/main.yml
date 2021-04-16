@@ -7,3 +7,4 @@ nodered_user_sudo: false
 nodered_args:
 nodered_node_args: --max-old-space-size=128
 nodered_config_backup: false
+nodered_config_functionExternalModules: false
