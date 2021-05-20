@@ -3,6 +3,7 @@
   apt:
     name:
       - openssh-client
+      - acl
     update_cache: true
     cache_valid_time: "{{ apt_cache_valid_time | default('0') }}"
     state: present
